@@ -108,7 +108,7 @@ for (i, imagePath) in enumerate(imagePaths):
 			total += 1 #faces detected counter
 
 # dump the facial embeddings + names to disk
-print("Number of faces detected "+ str(total))
+print("Number of faces detected " + str(total))
 data = {"embeddings": knownEmbeddings, "names": knownNames}
 
 # "wb" = write and binary, binary to write pickle
