@@ -15,11 +15,11 @@ print("label laddle label")
 le = LabelEncoder()
 labels = le.fit_transform(data["names"])
 
-# train the model used to accept the 128-d embeddings of the face and
-# then produce the actual face recognition
-
-print("[train model for 128 d features")
+# train the model used to accept the 128-d embeddings of the face and then produce the actual face recognition
+# Lineair support vector machine is used (SVC)
+print("train model for 128 d features")
 recognizer = SVC(C=1.0, kernel="linear", probability=True)
+# fit = "train" model
 recognizer.fit(data["embeddings"], labels)
 
 # write face recognition model to disk
