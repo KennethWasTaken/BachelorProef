@@ -23,13 +23,9 @@ path_embeddingmodel = "./openface_nn4.small2.v1.t7"
 # min probability to filter out weak detections
 set_confidence = 0.5
 
-# args = vars(ap.parse_args())
-
 # load face detector, Caffe based detector to localize faces in an image
 proto_path = "./face_detection_model/deploy.prototxt"
 model_path = "./face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"
-
-
 detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
 # load face extractor
