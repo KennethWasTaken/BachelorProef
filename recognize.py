@@ -57,8 +57,9 @@ imagePaths = list(paths.list_images(path_images))
 
 for img in imagePaths:
 	image = cv2.imread(img)
-	cv2.imshow("test pic", image)
-	cv2.waitkey(5000)
+	print("image gets read")
+	# cv2.imshow("test pic", image)
+	# cv2.waitKey(1000)
 	image = imutils.resize(image, width=600)
 	(h, w) = image.shape[:2]
 
