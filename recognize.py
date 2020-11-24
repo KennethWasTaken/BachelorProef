@@ -1,24 +1,15 @@
-# USAGE
-# python recognize.py --detector face_detection_model \
-#	--embedding-model openface_nn4.small2.v1.t7 \
-#	--recognizer output/recognizer.pickle \
-#	--le output/le.pickle --image images/adrian.jpg
-
 # import the necessary packages
 import numpy as np
-import argparse
 import imutils
 import cv2
 import pickle as pickle
-import os
+from imutils import paths
 
 # detector = A pre-trained Caffe DL model to detect where in the image the faces are
 # embedder = A pre-trained Torch DL model to calculate our 128-D face embeddings
 # recognizer = self trained linear SVM face recognition model
 
 # path to input images, images that need to be recognised.
-from imutils import paths
-
 path_images = r"./images/"
 
 # The path to OpenCV’s deep learning face detector.
@@ -57,13 +48,14 @@ imagePaths = list(paths.list_images(path_images))
 
 for img in imagePaths:
 	image = cv2.imread(img)
-	print("image gets read")
+	print("\n image gets read")
 	# cv2.imshow("test pic", image)
 	# cv2.waitKey(1000)
 	image = imutils.resize(image, width=600)
 	(h, w) = image.shape[:2]
 
 	# make blob from image
+	print("blobbing")
 	imageBlob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300),(104.0, 177.0, 123.0), swapRB=False, crop=False)
 
 	# apply OpenCV's deep learning-based face detector to detect faces in image
@@ -76,12 +68,14 @@ for img in imagePaths:
 		confidence = detections[0, 0, i, 2]
 
 		# filter out weak detections
-		if confidence > 0.6:
+		if confidence > 0.5:
 			# calculate coordinates of bounding box
+			print("box coordinates")
 			box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
 			(startX, startY, endX, endY) = box.astype("int")
 
 			# extract the face ROI based on coordinates
+			print("extract face")
 			face = image[startY:endY, startX:endX]
 			(fH, fW) = face.shape[:2]
 
@@ -90,6 +84,7 @@ for img in imagePaths:
 			# 	continue
 
 			# make blob for face ROI, pass blob through face embedding model to get the 128-d quantification of the face
+			print("Get 128 D face features")
 			faceBlob = cv2.dnn.blobFromImage(face, 1.0 / 255, (96, 96),
 				(0, 0, 0), swapRB=True, crop=False)
 			embedder.setInput(faceBlob)
@@ -101,15 +96,13 @@ for img in imagePaths:
 			proba = preds[j]
 			name = le.classes_[j]
 
-			# draw the bounding box of the face along with the associated
-			# probability
+			# draw the bounding box of the face along with the associated probability
 			text = "{}: {:.2f}%".format(name, proba * 100)
+			print(text)
 			y = startY - 10 if startY - 10 > 10 else startY + 10
-			cv2.rectangle(image, (startX, startY), (endX, endY),
-				(0, 0, 255), 2)
-			cv2.putText(image, text, (startX, y),
-				cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+			cv2.rectangle(image, (startX, startY), (endX, endY),(0, 0, 255), 2)
+			cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
 	# show the output image
 	cv2.imshow("Image", image)
-	cv2.waitKey(0)
+	cv2.waitKey(1000)
