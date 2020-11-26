@@ -49,8 +49,8 @@ imagePaths = list(paths.list_images(path_images))
 for img in imagePaths:
 	image = cv2.imread(img)
 	print("\n image gets read")
-	# cv2.imshow("test pic", image)
-	# cv2.waitKey(1000)
+	cv2.imshow("test pic", image)
+	cv2.waitKey(1000)
 	image = imutils.resize(image, width=600)
 	(h, w) = image.shape[:2]
 
@@ -63,12 +63,13 @@ for img in imagePaths:
 	detections = detector.forward()
 
 	# loop over the detections
+	print(str(detections.shape[2]))
 	for i in range(0, detections.shape[2]):
 		# get confidence of prediction
 		confidence = detections[0, 0, i, 2]
 
 		# filter out weak detections
-		if confidence > 0.5:
+		if confidence > 0.6:
 			# calculate coordinates of bounding box
 			print("box coordinates")
 			box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
@@ -77,6 +78,8 @@ for img in imagePaths:
 			# extract the face ROI based on coordinates
 			print("extract face")
 			face = image[startY:endY, startX:endX]
+			if len(face)==0:
+				continue
 			(fH, fW) = face.shape[:2]
 
 			# ensure the face width and height large enough

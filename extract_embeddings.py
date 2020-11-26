@@ -2,11 +2,9 @@ import re
 
 from imutils import paths
 import numpy as np
-import argparse
 import imutils
 import pickle
 import cv2
-import os
 
 # path to input directory of faces + images
 path_dataset = r"./dataset/"

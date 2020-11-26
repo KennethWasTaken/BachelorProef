@@ -9,7 +9,7 @@ path_label_encoder= r"./output/le.pickle"
 # load the face embeddings
 print("get face embeddings")
 data = pickle.loads(open(path_embeddings, "rb").read())
-
+    
 # encode the labels
 print("label laddle label")
 le = LabelEncoder()
