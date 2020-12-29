@@ -5,6 +5,7 @@ import numpy as np
 import imutils
 import pickle
 import cv2
+import os
 
 # path to input directory of faces + images
 path_dataset = r"./dataset/"
@@ -33,6 +34,7 @@ embedder = cv2.dnn.readNetFromTorch(path_embeddingmodel)
 # paths to ID-cards
 print("quantify faces")
 imagePaths = list(paths.list_images(path_dataset))
+
 # initialize our lists of extracted facial embeddings and
 # corresponding people names (in the image names)
 knownEmbeddings = []
@@ -45,9 +47,9 @@ total = 0
 for (i, imagePath) in enumerate(imagePaths):
 	# extract the person name from the image path
 	print("image {}/{}".format(i + 1, len(imagePaths)))
-	a = imagePath.split("/")
-	b = a[2].split(".")
-	name = b[0]
+	a = imagePath.split(os.path.sep)
+	a = a[0].split("/")
+	name = a[2]
 
 	# load the image, resize it to have a width of 600 pixels +  image dimensions
 	image = cv2.imread(imagePath)

@@ -95,8 +95,11 @@ for img in imagePaths:
 
 			# classification to "recognize" face aka label it right
 			preds = recognizer.predict_proba(vec)[0]
+			# take highest probability index
 			j = np.argmax(preds)
+			# calculate probability this can be used as extra treshold filter to filter out the weaker detectioans, aka with a lower probability.
 			proba = preds[j]
+			# look up name name with highest probability index for this face
 			name = le.classes_[j]
 
 			# draw the bounding box of the face along with the associated probability
