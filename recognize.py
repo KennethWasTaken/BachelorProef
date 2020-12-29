@@ -103,12 +103,15 @@ for img in imagePaths:
 			name = le.classes_[j]
 
 			# draw the bounding box of the face along with the associated probability
+			# text = name and probability as text to go with bounding box
 			text = "{}: {:.2f}%".format(name, proba * 100)
 			print(text)
 			y = startY - 10 if startY - 10 > 10 else startY + 10
+			# Draw bounding box
 			cv2.rectangle(image, (startX, startY), (endX, endY),(0, 0, 255), 2)
 			cv2.putText(image, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
 	# show the output image
 	cv2.imshow("Image", image)
-	cv2.waitKey(1000)
+	# show result until 0 is pressed
+	cv2.waitKey(0)
